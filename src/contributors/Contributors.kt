@@ -46,7 +46,7 @@ interface Contributors: CoroutineScope {
     }
 
     fun loadContributors() {
-        val (username, password, org, _) = getParams()
+        val (username: String, password, org, _) = getParams()
         val req = RequestData(username, password, org)
 
         clearResults()
@@ -55,39 +55,34 @@ interface Contributors: CoroutineScope {
         val startTime = System.currentTimeMillis()
         when (getSelectedVariant()) {
             BLOCKING -> { // Blocking UI thread
-                val users = loadContributorsBlocking(service, req)
-                updateResults(users, startTime)
+                updateResults(loadContributorsBlocking(service, req), startTime)
             }
             BACKGROUND -> { // Blocking a background thread
                 loadContributorsBackground(service, req) { users ->
-                    SwingUtilities.invokeLater {
-                        updateResults(users, startTime)
-                    }
+                    SwingUtilities.invokeLater { updateResults(users, startTime) }
                 }
             }
             CALLBACKS -> { // Using callbacks
                 loadContributorsCallbacks(service, req) { users ->
-                    SwingUtilities.invokeLater {
-                        updateResults(users, startTime)
-                    }
+                    SwingUtilities.invokeLater { updateResults(users, startTime) }
                 }
             }
             SUSPEND -> { // Using coroutines
                 launch {
-                    val users = loadContributorsSuspend(service, req)
-                    updateResults(users, startTime)
+                    updateResults(loadContributorsSuspend(service, req), startTime)
                 }.setUpCancellation()
             }
             CONCURRENT -> { // Performing requests concurrently
-                launch {
-                    val users = loadContributorsConcurrent(service, req)
-                    updateResults(users, startTime)
+                launch  {
+                    val contributors = loadContributorsConcurrent(service, req)
+                    launch (Dispatchers.Main) {
+                        updateResults(contributors, startTime)
+                    }
                 }.setUpCancellation()
             }
             NOT_CANCELLABLE -> { // Performing requests in a non-cancellable way
                 launch {
-                    val users = loadContributorsNotCancellable(service, req)
-                    updateResults(users, startTime)
+                    updateResults(loadContributorsNotCancellable(service, req), startTime)
                 }.setUpCancellation()
             }
             PROGRESS -> { // Showing progress

@@ -1,6 +1,10 @@
 package tasks
 
-import contributors.*
+import contributors.GitHubService
+import contributors.RequestData
+import contributors.User
+import contributors.logRepos
+import contributors.logUsers
 import retrofit2.Response
 
 fun loadContributorsBlocking(service: GitHubService, req: RequestData) : List<User> {
@@ -19,6 +23,4 @@ fun loadContributorsBlocking(service: GitHubService, req: RequestData) : List<Us
     }.aggregate()
 }
 
-fun <T> Response<List<T>>.bodyList(): List<T> {
-    return body() ?: emptyList()
-}
+fun <T> Response<List<T>>.bodyList(): List<T>  = body() ?: emptyList()
