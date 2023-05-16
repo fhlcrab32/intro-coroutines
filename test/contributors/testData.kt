@@ -6,7 +6,7 @@ data class TestRepo(val name: String, val delay: Long, val users: List<User>)
 
 data class TestResults(val timeFromStart: Long, val users: List<User>)
 
-const val reposDelay = 1000L
+const val REPOS_DELAY = 1000L
 
 val testRepos = listOf(
     TestRepo(
@@ -35,7 +35,7 @@ val repos = testRepos.mapIndexed { index, testRepo -> Repo(index.toLong(), testR
 val reposMap = testRepos.associateBy { it.name }
 
 val expectedResults = TestResults(
-    4000, // 1000 + (1000 + 1200 + 800)
+    300, // 100 + (100 + 120 + 80)
     listOf(
         User("user-2", 100),
         User("user-3", 60),
@@ -44,17 +44,17 @@ val expectedResults = TestResults(
 )
 
 val expectedConcurrentResults = TestResults(
-    2200, // 1000 + max(1000, 1200, 800)
+    220, // 100 + max(100, 120, 80)
     expectedResults.users
 )
 
 val progressResults = listOf(
     TestResults(
-        2000, // 1000 + 1000
+        200, // 100 + 100
         listOf(User(login = "user-2", contributions = 20), User(login = "user-1", contributions = 10))
     ),
     TestResults(
-        3200, // 2000 + 1200
+        320, // 200 + 120
         listOf(User(login = "user-2", contributions = 50), User(login = "user-1", contributions = 50))
     ),
     expectedResults
@@ -62,11 +62,11 @@ val progressResults = listOf(
 
 val concurrentProgressResults = listOf(
     TestResults(
-        1800, // 1000 + 800
+        180, // 100 + 80
         listOf(User(login = "user-3", contributions = 60), User(login = "user-2", contributions = 50))
     ),
     TestResults(
-        2000, // 1000 + max(800, 1000)
+        200, // 100 + max(80, 100)
         listOf(User(login = "user-2", contributions = 70), User(login = "user-3", contributions = 60),
             User(login = "user-1", contributions = 10))
     ),
