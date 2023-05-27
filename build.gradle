@@ -40,16 +40,17 @@ dependencies {
 
 compileKotlin {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_18
         freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
     }
 }
 
 compileTestKotlin {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_18
         freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
         freeCompilerArgs += "-Xuse-experimental=kotlin.Experimental"
+
     }
 }
 

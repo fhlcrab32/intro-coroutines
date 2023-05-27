@@ -1,7 +1,7 @@
 package tasks
 
 import contributors.*
-import java.util.concurrent.CountDownLatch
+
 
 suspend fun loadContributorsSuspend(service: GitHubService, req: RequestData): List<User> {
     val repos = service.getOrgRepos(req.org)

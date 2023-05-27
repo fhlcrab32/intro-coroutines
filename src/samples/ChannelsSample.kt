@@ -1,7 +1,8 @@
 package samples
 
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 fun main() = runBlocking<Unit> {
     val channel = Channel<String>()
@@ -15,7 +16,7 @@ fun main() = runBlocking<Unit> {
         log("B done")
     }
     launch {
-        repeat(3) {
+        repeat(times = 3) {
             val x = channel.receive()
             log(x)
         }
